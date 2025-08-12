@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Small Spec</title>
+        <link rel="stylesheet" href="main.css">
+    </head>
+    <body>
+        <h1>Small Specification</h1>
+        <h5><em>Specification for the Small processor architecture and instruction set</em></h5>
+
+        <h3>Architecture</h3>
+        <pre>
+The architecture of the Small processor is, as the man implies, small and easy to implement in hardware.
+It consists of the following components, hierarchically:
+
+- Registers
+    - <b>acc</b>
+        A single general purpose accumulator register.
+    - <b>inst</b>
+        The instruction register.
+    - <b>pc</b>
+        Program counter register. This one has built-in counting capabilities.
+- Memory
+    - <b>prog</b>
+        Program memory from which instruction are read and executed.
+    - <b>data</b>
+        Data memory which may be written to / read from by the program.
+- Logic Unit
+    The logic unit does not perform any arithmetic.
+    Functions it computes are:
+    - Nand
+    - Shift left
+    - Shift right
+    - Compare Zero
+- Control Unit
+    - Instruction decoder
+    - Halting logic
+    - Branching logic
+    - IO buffers
+        -Left up to implementer, as this needs to match use case.
+
+Bit width as well as physical memory layout are left up the implementer.
+This architecture does not support memory indirection, however programs may be self-modifying.
+        </pre>
+
+        <h3>Execution</h3>
+        <pre>
+On the processor execution is broken into 2 phases,
+based on the least significant bit of the program counter:
+
+- Instruction Read
+    Instruction is read from <b>prog</b> and stored into <b>inst</b>.
+- Instruction Execute
+    Instruction is decoded and executed.
+    Because the program counter has advanced,
+    the argument of the instruction is now accessible and ready for execution.
+
+Each instruction therefore takes two clock cycles or one processor cycle to execute.
+Instruction are decoded directly into control line signals without any micro code layer.
+        </pre>
+
+        <h3>Instruction Set</h3>
+        <pre>
+The Small instruction set contains 12 instructions,
+which can be split into 4 categories:
+
+- Logic
+    - <b>ldi</b> Load Immediate
+        Load argument as immediate value into <b>acc</b>.
+    - <b>shr</b> Shift Right
+        Shift content of <b>acc</b> right.
+    - <b>shl</b> Shift Left
+        Shift content of <b>acc</b> left.
+    - <b>nad</b> Nand / Not-And
+        Compute Not-And between <b>acc</b> and <b>data</b> at argument.
+- Flow control
+    - <b>jmp</b> Jump
+        Jump to <b>prog</b> address.
+        Address is shifted right, because each instruction is two words.
+    - <b>jmz</b> Jump Zero
+        Jump to <b>prog</b> address if <b>acc</b> is zero.
+    - <b>hlt</b> Halt
+        Halt processor execution.
+- Memory
+    - <b>lda</b> Load Accumulator
+        Load from <b>data</b> to <b>acc</b>.
+        Memory address is argument.
+    - <b>lda</b> Store Accumulator
+        Store from <b>acc</b> to <b>data</b>.
+        Memory address is argument.
+- Other
+    - <b>out</b> Output
+        Output <b>acc</b>.
+        Implementation specific.
+    - <b>inp</b> Input
+        Input to <b>acc</b>.
+        Implementation specific.
+    - <b>res</b> Reserved
+        Reserved instruction.
+        Implementation specific.
+        </pre>
+    </body>
+</html>
+
+
