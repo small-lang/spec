@@ -99,6 +99,27 @@ which can be split into 4 categories:
         Reserved instruction.
         Implementation specific.
         </pre>
+
+        <h3>Bytecode</h3>
+        <pre>
+Code | Mnemonic | Meaning        | C-Style Effect
+-----+----------+----------------+----------------
+ 00  |   hlt    | Halt           | halt()
+ 01  |   ldi    | Load Immediate | acc = arg
+ 02  |   shr    | Shift Right    | acc <<= 1
+ 03  |   shl    | Shift Left     | acc >>= 1
+ 04  |   nad    | Not-And        | acc = ~(acc | mem[arg])
+ 05  |   jmp    | Jump           | pc = arg
+ 06  |   jmz    | Jump Zero      | if (!acc) pc = arg
+ 07  |   lda    | Load Acc       | acc = mem[arg]
+ 08  |   sta    | Store Acc      | mem[arg] = acc
+ 09  |   out    | Output         | out(acc)
+ 10  |   inp    | Input          | acc = inp()
+ 11  |   res    | Reserved       | rev()
+
+The <b>hlt</b> instruction is encoded as 0, to avoid zero'd out memory from being executed.
+        </pre>
+
     </body>
 </html>
 
