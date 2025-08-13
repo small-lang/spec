@@ -106,8 +106,8 @@ Code | Mnemonic | Meaning        | C-Style Effect
 -----+----------+----------------+----------------
  00  |   hlt    | Halt           | halt()
  01  |   ldi    | Load Immediate | acc = arg
- 02  |   shr    | Shift Right    | acc <<= 1
- 03  |   shl    | Shift Left     | acc >>= 1
+ 02  |   shr    | Shift Right    | acc >>= 1
+ 03  |   shl    | Shift Left     | acc <<= 1
  04  |   nad    | Not-And        | acc = ~(acc | mem[arg])
  05  |   jmp    | Jump           | pc = arg
  06  |   jmz    | Jump Zero      | if (!acc) pc = arg
