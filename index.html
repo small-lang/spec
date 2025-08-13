@@ -25,6 +25,8 @@ It consists of the following components, hierarchically:
         Program memory from which instruction are read and executed.
     - <b>data</b>
         Data memory which may be written to / read from by the program.
+    - <b>stack</b>
+        Stack memory to do calls and store user data.
 - Logic Unit
     The logic unit does not perform any arithmetic.
     Functions it computes are:
@@ -61,7 +63,7 @@ Instruction are decoded directly into control line signals without any micro cod
 
         <h3>Instruction Set</h3>
         <pre>
-The Small instruction set contains 12 instructions,
+The Small instruction set contains 16 instructions,
 which can be split into 4 categories:
 
 - Logic
@@ -81,6 +83,10 @@ which can be split into 4 categories:
         Jump to <b>prog</b> address if <b>acc</b> is zero.
     - <b>hlt</b> Halt
         Halt processor execution.
+    - <b>cal</b> Call
+        Call subroutine.
+    - <b>ret</b> Return
+        Return from subroutine.
 - Memory
     - <b>lda</b> Load Accumulator
         Load from <b>data</b> to <b>acc</b>.
@@ -88,6 +94,10 @@ which can be split into 4 categories:
     - <b>lda</b> Store Accumulator
         Store from <b>acc</b> to <b>data</b>.
         Memory address is argument.
+    - <b>pha</b> Push Accumulator
+        Push from <b>acc</b> to stack.
+    - <b>pla</b> Pull Accumulator
+        Pull from stack to <b>acc</b>.
 - Other
     - <b>out</b> Output
         Output <b>acc</b>.
@@ -111,11 +121,15 @@ Code | Mnemonic | Meaning        | C-Style Effect
  04  |   nad    | Not-And        | acc = ~(acc | mem[arg])
  05  |   jmp    | Jump           | pc = arg
  06  |   jmz    | Jump Zero      | if (!acc) pc = arg
- 07  |   lda    | Load Acc       | acc = mem[arg]
- 08  |   sta    | Store Acc      | mem[arg] = acc
- 09  |   out    | Output         | out(acc)
- 10  |   inp    | Input          | acc = inp()
- 11  |   res    | Reserved       | rev()
+ 07  |   cal    | Call           | *stack++ = pc; pc = arg
+ 08  |   ret    | Return         | pc = *(--stack)
+ 09  |   lda    | Load Acc       | acc = mem[arg]
+ 10  |   sta    | Store Acc      | mem[arg] = acc
+ 11  |   pha    | Push Acc       | *stack++  = acc
+ 12  |   pla    | Pull Acc       | acc = *(--stack)
+ 13  |   out    | Output         | out(acc)
+ 14  |   inp    | Input          | acc = inp()
+ 15  |   res    | Reserved       | rev()
 
 The <b>hlt</b> instruction is encoded as 0, to avoid zero'd out memory from being executed.
         </pre>
